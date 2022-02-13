@@ -1,0 +1,43 @@
+// definisikan versi syntax proto
+syntax = "proto3";
+
+// import tipe timestamp karena kita membutuhkan
+import "google/protobuf/timestamp.proto";
+
+// definisikan nama package
+package service.paymentpb;
+
+// opsional definisi package untuk go
+option go_package = "../paymentpb";
+
+// tipe enum untuk jenis pembayaran
+// = 0  artinya enum default
+enum PaymentMethod {
+    BNI = 0;
+    GOPAY = 1;
+    SHOPEEPAY = 2;
+    PAYPAL = 3;
+    METAMASK = 4;
+}
+
+// tipe message untuk response atau return data
+// = n adalah urutan data dan harus diisikan
+message CreatePaymentResponse {
+    string payment_id = 1;
+    string payment_link = 2;
+    google.protobuf.Timestamp expired = 3;
+}
+
+// tipe message untuk parameter request yang diperlukan
+message CreatePaymentRequest {
+    string order_id = 1;
+    float total_amount = 2;
+    PaymentMethod payment_method = 3;
+}
+
+
+// definisi service atau bisa dikatakan nama fungsi yang akan di gunakan
+service Payment {
+  rpc CreatePayment(CreatePaymentRequest) returns (CreatePaymentResponse) {}
+}
+
